@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta del Clima</title>
+    <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+
+    <h1>Consulta el Clima</h1>
+    <p>Introduce el nombre de una ciudad y obtén el clima actual:</p>
+
+    <input type="text" id="cityInput" placeholder="Nombre de la ciudad">
+    <button id="getWeatherBtn">Obtener Clima</button>
+
+    <div id="result">
+        <p id="cityName"></p>
+        <p id="temperature"></p>
+        <p id="description"></p>
+    </div>
+
+    <script>
+        document.getElementById('getWeatherBtn').addEventListener('click', function() {
+            // Obtener el nombre de la ciudad ingresada
+            const city = document.getElementById('cityInput').value;
+
+            
+            const apiKey = '64ec1d8d84ba0569b44fad12466ce947'; // Clave dada por la API
+            const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${'64ec1d8d84ba0569b44fad12466ce947'}&units=metric&lang=es`;
+
+            // Realizar la solicitud a la API
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.cod === 200) {
+                        // Mostrar los datos del clima en la página
+                        document.getElementById('cityName').textContent = `Ciudad: ${data.name}`;
+                        document.getElementById('temperature').textContent = `Temperatura: ${data.main.temp}°C`;
+                        document.getElementById('description').textContent = `Descripción: ${data.weather[0].description}`;
+                    } else {
+                        // Si no se encuentra la ciudad o hay un error
+                        document.getElementById('cityName').textContent = 'Ciudad no encontrada o error en la solicitud.';
+                        document.getElementById('temperature').textContent = '';
+                        document.getElementById('description').textContent = '';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error al realizar la solicitud:', error);
+                    document.getElementById('cityName').textContent = 'Error al obtener los datos del clima.';
+                    document.getElementById('temperature').textContent = '';
+                    document.getElementById('description').textContent = '';
+                });
+        });
+    </script>
+
+</body>
+</html>
